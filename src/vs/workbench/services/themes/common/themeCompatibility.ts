@@ -52,8 +52,8 @@ addSettingMapping('foreground', colorRegistry.editorForeground);
 addSettingMapping('selection', colorRegistry.editorSelectionBackground);
 addSettingMapping('inactiveSelection', colorRegistry.editorInactiveSelection);
 addSettingMapping('selectionHighlightColor', colorRegistry.editorSelectionHighlight);
-addSettingMapping('findMatchHighlight', colorRegistry.editorFindMatchHighlight);
-addSettingMapping('currentFindMatchHighlight', colorRegistry.editorFindMatch);
+addSettingMapping('findMatchHighlight', colorRegistry.editorFindMatchHighlightBackground);
+addSettingMapping('currentFindMatchHighlight', colorRegistry.editorFindMatchBackground);
 addSettingMapping('hoverHighlight', colorRegistry.editorHoverHighlight);
 addSettingMapping('wordHighlight', 'editor.wordHighlightBackground'); // inlined to avoid editor/contrib dependenies
 addSettingMapping('wordHighlightStrong', 'editor.wordHighlightStrongBackground');
