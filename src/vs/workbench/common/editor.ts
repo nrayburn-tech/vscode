@@ -344,7 +344,7 @@ export interface ISaveOptions {
 	/**
 	 * Instructs the save operation to skip any save participants.
 	 */
-	readonly skipSaveParticipants?: boolean;
+	readonly skipSaveParticipants?: boolean | string[];
 
 	/**
 	 * A hint as to which file systems should be available for saving.

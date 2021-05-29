@@ -734,12 +734,16 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 		return this.saveSequentializer.setPending(versionId, (async () => {
 
+
+			const skipSaveParticipants = Array.isArray(options.skipSaveParticipants) ? options.skipSaveParticipants.length >= this.textFileService.files.saveParticipantIds.length : options.skipSaveParticipants;
+
+
 			// A save participant can still change the model now and since we are so close to saving
 			// we do not want to trigger another auto save or similar, so we block this
 			// In addition we update our version right after in case it changed because of a model change
 			//
 			// Save participants can also be skipped through API.
-			if (this.isResolved() && !options.skipSaveParticipants) {
+			if (this.isResolved() && !skipSaveParticipants) {
 				try {
 
 					// Measure the time it took from the last undo/redo operation to this save. If this
@@ -764,7 +768,9 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 					// Run save participants unless save was cancelled meanwhile
 					if (!saveCancellation.token.isCancellationRequested) {
-						await this.textFileService.files.runSaveParticipants(this, { reason: options.reason ?? SaveReason.EXPLICIT }, saveCancellation.token);
+						const skipSaveParticipantIds = this.textEditorModel?.getOptions().skipSaveParticipantIds;
+						console.log(skipSaveParticipantIds);
+						await this.textFileService.files.runSaveParticipants(this, { reason: options.reason ?? SaveReason.EXPLICIT }, skipSaveParticipantIds, saveCancellation.token);
 					}
 				} catch (error) {
 					this.logService.error(`[text file model] runSaveParticipants(${versionId}) - resulted in an error: ${error.toString()}`, this.resource.toString(true));

@@ -316,7 +316,13 @@ export interface ITextFileResolveEvent {
 	readonly reason: TextFileResolveReason;
 }
 
+export interface ITextFileSaveParticipantSaveEvent extends ITextFileSaveEvent {
+	readonly id: string;
+}
+
 export interface ITextFileSaveParticipant {
+
+	id: string;
 
 	/**
 	 * Participate in a save of a model. Allows to change the model
@@ -350,6 +356,8 @@ export interface ITextFileEditorModelManager {
 	 */
 	saveErrorHandler: ISaveErrorHandler;
 
+	readonly saveParticipantIds: string[];
+
 	/**
 	 * Returns the text file editor model for the provided resource
 	 * or undefined if none.
@@ -369,7 +377,7 @@ export interface ITextFileEditorModelManager {
 	/**
 	 * Runs the registered save participants on the provided model.
 	 */
-	runSaveParticipants(model: ITextFileEditorModel, context: { reason: SaveReason; }, token: CancellationToken): Promise<void>
+	runSaveParticipants(model: ITextFileEditorModel, context: { reason: SaveReason; }, skipParticipantIds: string[], token: CancellationToken): Promise<void>
 
 	/**
 	 * Waits for the model to be ready to be disposed. There may be conditions

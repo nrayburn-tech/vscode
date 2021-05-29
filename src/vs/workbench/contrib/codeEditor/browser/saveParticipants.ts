@@ -34,6 +34,8 @@ import { ExtensionIdentifier } from 'vs/platform/extensions/common/extensions';
 
 export class TrimWhitespaceParticipant implements ITextFileSaveParticipant {
 
+	id = 'trimWhitespace';
+
 	constructor(
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 		@ICodeEditorService private readonly codeEditorService: ICodeEditorService
@@ -100,6 +102,8 @@ function findEditor(model: ITextModel, codeEditorService: ICodeEditorService): I
 
 export class FinalNewLineParticipant implements ITextFileSaveParticipant {
 
+	id = 'finalNewLine';
+
 	constructor(
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 		@ICodeEditorService private readonly codeEditorService: ICodeEditorService
@@ -137,6 +141,8 @@ export class FinalNewLineParticipant implements ITextFileSaveParticipant {
 }
 
 export class TrimFinalNewLinesParticipant implements ITextFileSaveParticipant {
+
+	id = 'trimFinalNewLines';
 
 	constructor(
 		@IConfigurationService private readonly configurationService: IConfigurationService,
@@ -211,6 +217,8 @@ export class TrimFinalNewLinesParticipant implements ITextFileSaveParticipant {
 
 class FormatOnSaveParticipant implements ITextFileSaveParticipant {
 
+	id = 'format';
+
 	constructor(
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 		@ICodeEditorService private readonly codeEditorService: ICodeEditorService,
@@ -261,6 +269,8 @@ class FormatOnSaveParticipant implements ITextFileSaveParticipant {
 }
 
 class CodeActionOnSaveParticipant implements ITextFileSaveParticipant {
+
+	id = 'codeAction';
 
 	constructor(
 		@IConfigurationService private readonly configurationService: IConfigurationService,

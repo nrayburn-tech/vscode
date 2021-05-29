@@ -56,6 +56,8 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 
 	private readonly modelResolveQueue = this._register(new ResourceQueue());
 
+	readonly saveParticipantIds: string[] = [];
+
 	saveErrorHandler = (() => {
 		const notificationService = this.notificationService;
 
@@ -451,11 +453,12 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 	private readonly saveParticipants = this._register(this.instantiationService.createInstance(TextFileSaveParticipant));
 
 	addSaveParticipant(participant: ITextFileSaveParticipant): IDisposable {
+		this.saveParticipantIds.push(participant.id);
 		return this.saveParticipants.addSaveParticipant(participant);
 	}
 
-	runSaveParticipants(model: ITextFileEditorModel, context: { reason: SaveReason; }, token: CancellationToken): Promise<void> {
-		return this.saveParticipants.participate(model, context, token);
+	runSaveParticipants(model: ITextFileEditorModel, context: { reason: SaveReason; }, skipParticipantIds: string[], token: CancellationToken): Promise<void> {
+		return this.saveParticipants.participate(model, context, skipParticipantIds, token);
 	}
 
 	//#endregion

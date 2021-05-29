@@ -1612,6 +1612,7 @@ declare namespace monaco.editor {
 		readonly insertSpaces: boolean;
 		readonly defaultEOL: DefaultEndOfLine;
 		readonly trimAutoWhitespace: boolean;
+		readonly skipSaveParticipantIds: string[];
 	}
 
 	export interface ITextModelUpdateOptions {
@@ -1619,6 +1620,7 @@ declare namespace monaco.editor {
 		indentSize?: number;
 		insertSpaces?: boolean;
 		trimAutoWhitespace?: boolean;
+		skipSaveParticipantIds?: string[];
 	}
 
 	export class FindMatch {
@@ -2505,6 +2507,7 @@ declare namespace monaco.editor {
 		readonly indentSize: boolean;
 		readonly insertSpaces: boolean;
 		readonly trimAutoWhitespace: boolean;
+		readonly skipSaveParticipantIds: boolean;
 	}
 
 	/**
@@ -3233,6 +3236,7 @@ declare namespace monaco.editor {
 		 * Control if the editor should use shadow DOM.
 		 */
 		useShadowDOM?: boolean;
+		skipSaveParticipantIds?: string[];
 	}
 
 	/**

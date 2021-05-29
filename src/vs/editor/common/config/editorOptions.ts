@@ -642,6 +642,8 @@ export interface IEditorOptions {
 	 * Control if the editor should use shadow DOM.
 	 */
 	useShadowDOM?: boolean;
+
+	skipSaveParticipantIds?: string[];
 }
 
 /**

@@ -30,7 +30,7 @@ export class TextFileSaveParticipant extends Disposable {
 		return toDisposable(() => remove());
 	}
 
-	participate(model: ITextFileEditorModel, context: { reason: SaveReason; }, token: CancellationToken): Promise<void> {
+	participate(model: ITextFileEditorModel, context: { reason: SaveReason; }, skipParticipantIds: string[], token: CancellationToken): Promise<void> {
 		const cts = new CancellationTokenSource(token);
 
 		return this.progressService.withProgress({
@@ -43,10 +43,17 @@ export class TextFileSaveParticipant extends Disposable {
 			// undoStop before participation
 			model.textEditorModel?.pushStackElement();
 
+			console.log(skipParticipantIds);
 			for (const saveParticipant of this.saveParticipants) {
 				if (cts.token.isCancellationRequested || !model.textEditorModel /* disposed */) {
 					break;
 				}
+
+				if (skipParticipantIds.includes(saveParticipant.id)) {
+					console.log('Skipping', saveParticipant.id);
+					continue;
+				}
+				console.log('Saving', saveParticipant.id);
 
 				try {
 					const promise = saveParticipant.participate(model, context, progress, cts.token);

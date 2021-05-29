@@ -80,7 +80,8 @@ export class MainThreadTextEditorProperties {
 			insertSpaces: modelOptions.insertSpaces,
 			tabSize: modelOptions.tabSize,
 			cursorStyle: cursorStyle,
-			lineNumbers: lineNumbers
+			lineNumbers: lineNumbers,
+			skipSaveParticipantIds: modelOptions.skipSaveParticipantIds
 		};
 	}
 
@@ -148,6 +149,7 @@ export class MainThreadTextEditorProperties {
 			&& a.insertSpaces === b.insertSpaces
 			&& a.cursorStyle === b.cursorStyle
 			&& a.lineNumbers === b.lineNumbers
+			&& equals(a.skipSaveParticipantIds, b.skipSaveParticipantIds, (a, b) => a === b)
 		);
 	}
 }
@@ -407,6 +409,10 @@ export class MainThreadTextEditor {
 			this._codeEditor.updateOptions({
 				lineNumbers: lineNumbers
 			});
+		}
+
+		if (typeof newConfiguration.skipSaveParticipantIds !== 'undefined') {
+			this._codeEditor.updateOptions({ skipSaveParticipantIds: newConfiguration.skipSaveParticipantIds });
 		}
 	}
 

@@ -829,13 +829,16 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 
 		return this.saveSequentializer.setPending(versionId, (async () => {
 
+
+			const skipSaveParticipants = Array.isArray(options.skipSaveParticipants) ? options.skipSaveParticipants.length >= this.textFileService.files.saveParticipantIds.length : options.skipSaveParticipants;
+
 			// A save participant can still change the working copy now
 			// and since we are so close to saving we do not want to trigger
 			// another auto save or similar, so we block this
 			// In addition we update our version right after in case it changed
 			// because of a working copy change
 			// Save participants can also be skipped through API.
-			if (this.isResolved() && !options.skipSaveParticipants && this.isTextFileModel(this.model)) {
+			if (this.isResolved() && !skipSaveParticipants && this.isTextFileModel(this.model)) {
 				try {
 
 					// Measure the time it took from the last undo/redo operation to this save. If this
@@ -860,7 +863,8 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 
 					// Run save participants unless save was cancelled meanwhile
 					if (!saveCancellation.token.isCancellationRequested) {
-						await this.textFileService.files.runSaveParticipants(this.model, { reason: options.reason ?? SaveReason.EXPLICIT }, saveCancellation.token);
+						console.log(options.skipSaveParticipants);
+						await this.textFileService.files.runSaveParticipants(this.model, { reason: options.reason ?? SaveReason.EXPLICIT }, (options.skipSaveParticipants as false | string[]) || [], saveCancellation.token);
 					}
 				} catch (error) {
 					this.logService.error(`[stored file working copy] runSaveParticipants(${versionId}) - resulted in an error: ${error.toString()}`, this.resource.toString(true), this.typeId);
