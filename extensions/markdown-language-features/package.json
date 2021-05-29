@@ -52,6 +52,14 @@
     ],
     "commands": [
       {
+        "command": "markdown.skipFinalNewLine",
+        "title": "Skip Final New Line Save Participant"
+      },
+      {
+        "command": "markdown.saveParticipantReset",
+        "title": "Reset Skip Save Participant"
+      },
+      {
         "command": "markdown.showPreview",
         "title": "%markdown.preview.title%",
         "category": "Markdown",

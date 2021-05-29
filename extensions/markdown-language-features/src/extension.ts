@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
-import { CommandManager } from './commandManager';
+import { Command, CommandManager } from './commandManager';
 import * as commands from './commands/index';
 import LinkProvider from './features/documentLinkProvider';
 import MDDocumentSymbolProvider from './features/documentSymbolProvider';
@@ -21,6 +21,7 @@ import { githubSlugifier } from './slugify';
 import { loadDefaultTelemetryReporter, TelemetryReporter } from './telemetryReporter';
 
 
+let editor: vscode.TextEditor | undefined;
 export function activate(context: vscode.ExtensionContext) {
 	const telemetryReporter = loadDefaultTelemetryReporter();
 	context.subscriptions.push(telemetryReporter);
@@ -44,6 +45,11 @@ export function activate(context: vscode.ExtensionContext) {
 		logger.updateConfiguration();
 		previewManager.updateConfiguration();
 	}));
+	editor = vscode.window.activeTextEditor;
+
+	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor((incoming) => {
+		editor = incoming;
+	}));
 }
 
 function registerMarkdownLanguageFeatures(
@@ -66,6 +72,27 @@ function registerMarkdownLanguageFeatures(
 	);
 }
 
+export class SkipSaveParticipantsFinalNewLineCommand implements Command {
+	public readonly id = 'markdown.skipFinalNewLine';
+
+	public execute() {
+		if (editor) { // editor is the current editor.
+			editor.options.skipSaveParticipantIds = ['finalNewLine'];
+		}
+	}
+}
+
+export class SkipSaveParticipantsResetCommand implements Command {
+	public readonly id = 'markdown.saveParticipantReset';
+
+	public execute() {
+		if (editor) { // editor is the current editor.
+			editor.options.skipSaveParticipantIds = [];
+		}
+	}
+}
+
+
 function registerMarkdownCommands(
 	previewManager: MarkdownPreviewManager,
 	telemetryReporter: TelemetryReporter,
@@ -85,6 +112,7 @@ function registerMarkdownCommands(
 	commandManager.register(new commands.OpenDocumentLinkCommand(engine));
 	commandManager.register(new commands.ToggleLockCommand(previewManager));
 	commandManager.register(new commands.RenderDocument(engine));
+	commandManager.register(new SkipSaveParticipantsFinalNewLineCommand());
+	commandManager.register(new SkipSaveParticipantsResetCommand());
 	return commandManager;
 }
-
